@@ -1,4 +1,4 @@
-#include "resource.h"
-
+#include "Resources.h"
+ 
 IDI_APP_ICON   ICON   "assets/app.ico"
-IDC_APP_CURSOR CURSOR "assets/cursor.cur"
+// IDC_APP_CURSOR CURSOR "assets/cursor.cur"

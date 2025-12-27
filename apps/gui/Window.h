@@ -1,6 +1,7 @@
-#ifndef WINDOW_HPP
-#define WINDOW_HPP
+#ifndef WINDOW_H
+#define WINDOW_H
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <windowsx.h>
 #include <string>
@@ -25,9 +26,13 @@ private:
     int windowCenterX;
     int windowCenterY;
 
-public:
-    Window();
+    static void (*inFocus)();
+    static void (*lostFocus)();
 
+    
+    public:
+    Window();
+    
     HWND Id() const;
     int Width() const;
     int Height() const;
@@ -36,18 +41,22 @@ public:
     int CenterY() const;
     string Title() const;
     COLORREF Color() const;
-
+    
     void Icon(const unsigned int icon);
     void Cursor(const  unsigned int cursor);
     void Title(const string title);
     void Size(int width, int height);
     void Mode(int mode);
     void Color(int r, int g, int b);
-
+    
     void HideCursor(bool hide);
     void Print(string text, int x, int y, COLORREF color);
+    void Clear();
     void Close();
     bool Create();
+    
+    void InFocus(void(*func)());
+    void LostFocus(void(*func)());
 
     static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 };
@@ -107,6 +116,14 @@ inline void Window::HideCursor(bool hide) {
 
 inline void Window::Close() {
     PostMessage(windowId, WM_DESTROY, 0, 0);
+}
+
+inline void Window::InFocus(void(*func)()) {
+    inFocus = func;
+}
+
+inline void Window::LostFocus(void(*func)()) {
+    lostFocus = func;
 }
 
 #endif

@@ -1,5 +1,8 @@
 #include "Window.h"
 
+void (*Window::inFocus)() = nullptr;
+void (*Window::lostFocus)() = nullptr;
+
 Window::Window() {
     windowId = 0;
     windowWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -45,6 +48,14 @@ void Window::Print(string text, int x, int y, COLORREF color) {
     ReleaseDC(windowId, xdc);
 }
 
+void Window::Clear() {
+    HDC xdc = GetDC(windowId);
+    RECT rect;
+    GetClientRect(windowId, &rect);
+    FillRect(xdc, &rect, CreateSolidBrush(Color()));
+    ReleaseDC(windowId, xdc);
+}
+
 bool Window::Create() {
     HINSTANCE appId = GetModuleHandle(NULL);
     WNDCLASSEX wndClass;
@@ -68,7 +79,7 @@ bool Window::Create() {
     }
     
     windowId = CreateWindowEx(
-        NULL,
+        0,
         "AppWindow",
         windowTitle.c_str(),
         windowStyle,
@@ -113,11 +124,23 @@ LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
     switch (message) {
     case WM_CLOSE:
         DestroyWindow(hwnd);
-        return 0;
+        return 0; // break
 
     case WM_DESTROY:
         PostQuitMessage(0);
-        return 0;
+        return 0; // break
+
+    case WM_SETFOCUS:
+        if(inFocus) {
+            inFocus();
+        }
+        return 0; // break
+
+    case WM_KILLFOCUS:
+        if(lostFocus) {
+            lostFocus();
+        }
+        return 0; // break
 
     default:
         return DefWindowProc(hwnd, message, wParam, lParam);
