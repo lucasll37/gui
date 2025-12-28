@@ -13,9 +13,8 @@ Engine::Engine() {
 }
 
 Engine::~Engine() {
-    delete app;
+    delete window;
     delete input;
-    delete app;
 }
 
 int Engine::Start(App* application) {

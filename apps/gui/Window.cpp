@@ -48,13 +48,26 @@ void Window::Print(string text, int x, int y, COLORREF color) {
     ReleaseDC(windowId, xdc);
 }
 
+
 void Window::Clear() {
     HDC xdc = GetDC(windowId);
     RECT rect;
     GetClientRect(windowId, &rect);
-    FillRect(xdc, &rect, CreateSolidBrush(Color()));
+    
+    HBRUSH brush = CreateSolidBrush(Color());
+    FillRect(xdc, &rect, brush);
+    DeleteObject(brush);  // ✅ Libera o brush
+    
     ReleaseDC(windowId, xdc);
 }
+
+// void Window::Clear() {
+//     HDC xdc = GetDC(windowId);
+//     RECT rect;
+//     GetClientRect(windowId, &rect);
+//     FillRect(xdc, &rect, CreateSolidBrush(Color()));
+//     ReleaseDC(windowId, xdc);
+// }
 
 bool Window::Create() {
     HINSTANCE appId = GetModuleHandle(NULL);
