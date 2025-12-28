@@ -1,6 +1,5 @@
 #include "MyApp.h"
 
-
 void MyApp::Init() {
     lastX = input->MouseX();
     lastY = input->MouseY();

@@ -8,6 +8,13 @@ add_executable(meu_app_gui WIN32
   Resources.rc
 )
 
+if(MINGW)
+  target_compile_options(meu_app_gui PRIVATE 
+    -finput-charset=UTF-8 
+    -fexec-charset=UTF-8
+  )
+endif()
+
 target_link_libraries(meu_app_gui PRIVATE meu_app_core)
 
 # Se estiver usando MinGW, o WIN32 às vezes já resolve;
