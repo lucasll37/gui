@@ -2,6 +2,9 @@ add_executable(meu_app_gui WIN32
   WinDXUT.cpp
   Window.cpp
   Input.cpp
+  Engine.cpp
+  App.cpp
+  MyApp.cpp
   Resources.rc
 )
 
